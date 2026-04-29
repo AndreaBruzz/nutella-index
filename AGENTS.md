@@ -135,6 +135,39 @@ Before finishing:
 - Mention commands to run.
 - Update docs if behavior changed.
 
+## UI & Layout Agent
+
+Role: maintain visual consistency, spacing uniformity, and responsive design standards.
+
+Rules:
+
+- Use shared layout constants from `lib/layout.ts` (PAGE_CONTAINER_CLASS, PAGE_HORIZONTAL_PADDING_CLASS) on all pages and headers.
+- Never use custom spacing values; only Tailwind standard scale (px-4, py-3, gap-3, etc.).
+- Never use custom text sizes; only Tailwind standard typography (text-2xl, text-3xl, text-4xl, etc.).
+- Never use custom border-radius; only standard values (rounded-lg, rounded-xl, rounded-2xl).
+- All page h1 headings must use: `text-2xl sm:text-3xl md:text-4xl`
+- Maintain consistent border opacities: primary `/50`, secondary `/35`, accent `/25`.
+- Use ref-based outside-click listeners for dropdowns (not document-level) to prevent regressions.
+- Single `useState` toggle for mobile menu open/close (not multiple listeners).
+- Keep header glass effect consistent: translucent by default, transparent variant on `/map` only.
+- Align header, footer, and content max-widths using shared constants (prevents drift).
+
+**Audit tasks** (check before proposing changes):
+
+- Scan all page files for consistent max-width usage.
+- Verify header/footer padding matches content padding.
+- Check for arbitrary spacing values (px-3, py-2.5, gap-2.25, pt-[6.25rem]).
+- Validate typography scale consistency across all h1/h2/h3.
+- Confirm mobile menu behavior uses ref-based listeners.
+
+Before finishing:
+
+- Verify no custom spacing values remain.
+- Check TypeScript safety.
+- Validate responsive breakpoints at sm/md.
+- Mention files changed.
+- Reference `docs/technical/LAYOUT_SYSTEM.md`.
+
 ## Supabase Agent
 
 Role: protect data access, query cost and schema consistency.
@@ -280,6 +313,7 @@ Update documentation when changing:
 Mapping:
 
 - Copy changes → `docs/copy/*.md`
+- Layout/spacing changes → `docs/technical/LAYOUT_SYSTEM.md`
 - Schema changes → `docs/technical/DATABASE_SCHEMA.md`
 - Architecture changes → `docs/technical/*`
 - Integration changes → `docs/technical/*`
@@ -292,13 +326,15 @@ Mapping:
 For non-trivial changes, apply agents in this order:
 
 1. Coding Agent
-2. Supabase Agent
-3. Mapbox / API Cost Agent
-4. SEO Agent
-5. Security Agent
+2. UI & Layout Agent
+3. Supabase Agent
+4. Mapbox / API Cost Agent
+5. SEO Agent
+6. Security Agent
 
-Security Agent has veto power over unsafe changes.
+Security Agent has final veto power.
 API Cost Agent has veto power over expensive repeated calls.
+UI & Layout Agent has veto power over spacing/typography inconsistencies.
 
 ## Ask before
 

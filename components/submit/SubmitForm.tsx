@@ -371,6 +371,7 @@ export default function SubmitForm({ locale, copy, countries, currencies }: Subm
         {selectedFile && imagePreviewUrl ? (
           <div className="mt-3 rounded-lg border border-[var(--nutella-gold)]/30 bg-[rgba(46,10,0,0.4)] p-3">
             <p className="mb-2 text-xs font-semibold text-[var(--nutella-cream)]">Photo preview:</p>
+            {/* eslint-disable-next-line @next/next/no-img-element -- preview URL is a blob/object URL generated client-side */}
             <img src={imagePreviewUrl} alt="Photo preview" className="max-h-48 w-full rounded-lg object-cover" />
             <p className="mt-2 text-xs text-[color:rgba(255,231,155,0.72)]">{selectedFile.name}</p>
           </div>

@@ -7,6 +7,7 @@ import { getCountryNameFromIso } from '@/lib/countries';
 import { hasLocale } from '@/lib/i18n/config';
 import type { Locale } from '@/lib/i18n/config';
 import { createLocalizedMetadata } from '@/lib/seo';
+import { formatPrice, formatDate } from '@/lib/formatting';
 
 export const revalidate = 1800;
 
@@ -14,18 +15,6 @@ type CountryEntriesPageProps = {
   params: Promise<{ locale: string; iso: string }>;
 };
 
-const formatPrice = (value: number) => `${value.toFixed(2)} EUR`;
-
-const formatDate = (value: string | null, locale: string) => {
-  if (!value) return 'N/A';
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return value;
-  return new Intl.DateTimeFormat(locale === 'it' ? 'it-IT' : 'en-US', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(parsed);
-};
 
 export async function generateMetadata({ params }: CountryEntriesPageProps): Promise<Metadata> {
   const { locale: rawLocale, iso } = await params;

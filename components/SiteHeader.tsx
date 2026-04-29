@@ -75,7 +75,7 @@ function CloseIcon() {
 export default function SiteHeader({ locale, nav, transparent = false }: SiteHeaderProps) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const mobileShellRef = useRef<HTMLDivElement>(null);
   const languageLabel = locale === 'it' ? 'Lingua' : 'Language';
   const isLandingPage = pathname === `/${locale}`;
 
@@ -111,25 +111,6 @@ export default function SiteHeader({ locale, nav, transparent = false }: SiteHea
     },
   ].filter((item) => !item.hidden);
 
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-
-    if (isMobileMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [isMobileMenuOpen]);
-
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
@@ -138,41 +119,56 @@ export default function SiteHeader({ locale, nav, transparent = false }: SiteHea
     setIsMobileMenuOpen((current) => !current);
   };
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (mobileShellRef.current && !mobileShellRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
+  }, [isMobileMenuOpen]);
+
   const headerClassName = [
-    'w-full rounded-2xl border border-[var(--nutella-gold)]/55 px-3 py-2 md:rounded-[1.35rem] md:px-6.5 md:py-3.25',
+    'w-full rounded-2xl border border-[var(--nutella-gold)]/50 px-4 py-3 md:px-8 md:py-4',
     transparent
-      ? 'bg-transparent shadow-none backdrop-blur-0'
+      ? 'bg-[rgba(46,10,0,0.14)] shadow-[0_14px_36px_rgba(0,0,0,0.06)] backdrop-blur-lg md:bg-[rgba(46,10,0,0.1)] md:shadow-[0_15px_40px_rgba(0,0,0,0.06)]'
       : 'bg-[rgba(46,10,0,0.05)] shadow-[0_14px_36px_rgba(0,0,0,0.05)] backdrop-blur-lg md:shadow-[0_15px_40px_rgba(0,0,0,0.05)]',
   ].join(' ');
 
   return (
-    <header className={headerClassName}>
-      <div className="md:hidden" ref={menuRef}>
-        <div className="flex items-center gap-2.5">
-          <Link href={`/${locale}`} onClick={closeMobileMenu} className="min-w-0 flex-1 rounded-xl px-1 py-0.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nutella-gold)]/80">
-            <span className="block truncate text-[1.05rem] font-extrabold tracking-tight text-[var(--nutella-cream)] sm:text-lg">{nav.title}</span>
-          </Link>
+    <header className="relative z-50">
+      <div ref={mobileShellRef} className={`md:hidden ${headerClassName} overflow-hidden`}>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="min-w-0 flex-1 text-xl font-extrabold tracking-tight text-[var(--nutella-cream)] sm:text-2xl">
+            <Link href={`/${locale}`} onClick={closeMobileMenu} className="block min-w-0 rounded-xl px-1 py-0.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nutella-gold)]/80">
+              <span className="block truncate whitespace-nowrap leading-none">{nav.title}</span>
+            </Link>
+          </h1>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={toggleMobileMenu}
-              aria-expanded={isMobileMenuOpen}
-              aria-controls="mobile-header-menu"
-              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--nutella-gold)]/65 bg-[rgba(250,179,11,0.2)] text-[var(--nutella-cream)] shadow-[0_10px_20px_rgba(0,0,0,0.2)] transition-all hover:-translate-y-0.5 hover:bg-[rgba(250,179,11,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nutella-gold)]"
-            >
-              {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={toggleMobileMenu}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-header-menu"
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[var(--nutella-gold)]/50 bg-[rgba(250,179,11,0.15)] text-[var(--nutella-cream)] shadow-[0_10px_20px_rgba(0,0,0,0.2)] transition-all hover:-translate-y-0.5 hover:bg-[rgba(250,179,11,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nutella-gold)]"
+          >
+            {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+          </button>
         </div>
 
         {isMobileMenuOpen && (
-          <nav id="mobile-header-menu" className="mt-3 flex flex-col gap-2 border-t border-[var(--nutella-gold)]/35 pt-3 items-center">
+          <div id="mobile-header-menu" className="-mx-4 mt-4 border-t border-[var(--nutella-gold)]/25 px-4 pt-4">
             <p className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[color:rgba(255,231,155,0.68)]">Navigation</p>
-            <div className="flex flex-col gap-2 w-full max-w-xs">
+            <div className="mt-2 flex w-full flex-col gap-2">
               {navItems.map((item) => (
-                <Link key={item.href} href={item.href} onClick={closeMobileMenu} className="group flex min-h-15 items-center gap-3 rounded-xl bg-[rgba(75,32,6,0.34)] px-3.5 py-3.5 text-[1rem] font-semibold text-[var(--nutella-cream)] transition-all hover:bg-[rgba(250,179,11,0.12)]">
+                <Link key={item.href} href={item.href} onClick={closeMobileMenu} className="group flex min-h-12 items-center gap-3 rounded-xl bg-[rgba(75,32,6,0.35)] px-4 py-3 text-base font-semibold text-[var(--nutella-cream)] transition-all hover:bg-[rgba(75,32,6,0.5)]">
                   <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[rgba(250,179,11,0.14)] text-[var(--nutella-gold)] transition-colors group-hover:bg-[rgba(250,179,11,0.22)]">
                     <item.Icon />
                   </span>
@@ -181,26 +177,26 @@ export default function SiteHeader({ locale, nav, transparent = false }: SiteHea
               ))}
             </div>
 
-            <div className="mt-1 flex items-center justify-between border-t border-[var(--nutella-gold)]/25 px-1 pt-3 w-full max-w-xs">
+            <div className="mt-4 flex items-center justify-between border-t border-[var(--nutella-gold)]/25 pt-3">
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[color:rgba(255,231,155,0.68)]">{languageLabel}</span>
               <LanguageSelector locale={locale} isCompact={true} />
             </div>
-          </nav>
+          </div>
         )}
       </div>
 
-      <div className="hidden items-center gap-4 md:grid md:grid-cols-[1fr_auto_1fr]">
+      <div className={`hidden items-center gap-4 md:grid md:grid-cols-[1fr_auto_1fr] ${headerClassName}`}>
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--nutella-cream)] md:text-[2.15rem]">
+          <h1 className="whitespace-nowrap text-2xl font-extrabold tracking-tight text-[var(--nutella-cream)] sm:text-3xl md:text-4xl">
             <Link href={`/${locale}`} className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nutella-gold)]">
               {nav.title}
             </Link>
           </h1>
         </div>
 
-        <nav className="justify-self-center flex flex-wrap items-center gap-2 md:gap-2.25">
+        <nav className="justify-self-center flex flex-wrap items-center gap-2 md:gap-3">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-[var(--nutella-cream)] transition-colors hover:bg-[rgba(250,179,11,0.15)] hover:text-[var(--nutella-gold)] md:gap-2.25 md:rounded-[0.7rem] md:px-3.25 md:py-2.25 md:text-[1.08rem]">
+            <Link key={item.href} href={item.href} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[var(--nutella-cream)] transition-colors hover:bg-[rgba(250,179,11,0.15)] hover:text-[var(--nutella-gold)] md:gap-3 md:rounded-lg md:px-4 md:py-2 md:text-base">
               <item.Icon />
               {item.label}
             </Link>

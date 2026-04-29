@@ -30,7 +30,10 @@ export async function logAnalyticsEvent(
       reason: truncate(event.reason, 240),
       user_agent: truncate(event.userAgent, 512),
     });
-  } catch {
+  } catch (err) {
     // Analytics must never block product flows.
+    // Log error for debugging (safe to ignore in production).
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    console.debug(`[analytics] Failed to log event "${event.eventName}": ${message}`);
   }
 }

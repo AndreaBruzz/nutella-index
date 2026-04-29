@@ -53,8 +53,7 @@ export const nutellaService = {
       .order('collected_at', { ascending: false });
 
     if (error) {
-      console.error('Errore nel recupero dati Nutella:', error);
-      return [];
+      throw new Error(`Failed to fetch Nutella entries: ${error.message}`);
     }
 
     return (data ?? []).map((entry) => ({

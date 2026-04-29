@@ -8,6 +8,8 @@ import type { RankingSort } from '@/types';
 import type { Locale } from '@/lib/i18n/config';
 import RankingSortTabs from '@/components/ranking/RankingSortTabs';
 import { SITE_URL } from '@/lib/seo';
+import { formatPrice, formatDate } from '@/lib/formatting';
+import { PAGE_CONTAINER_CLASS, PAGE_HORIZONTAL_PADDING_CLASS } from '@/lib/layout';
 
 export const revalidate = 1800;
 
@@ -18,18 +20,6 @@ type RankingPageProps = {
   searchParams?: Promise<{ sort?: string }>;
 };
 
-const formatPrice = (value: number) => `${value.toFixed(2)} EUR`;
-
-const formatDate = (value: string | null, locale: string) => {
-  if (!value) return 'N/A';
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return value;
-  return new Intl.DateTimeFormat(locale === 'it' ? 'it-IT' : 'en-US', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(parsed);
-};
 
 function BulbIcon() {
   return (
@@ -165,11 +155,11 @@ export default async function RankingPage({ params, searchParams }: RankingPageP
   };
 
   return (
-    <main className="bg-[var(--nutella-cocoa)] px-4 pb-10 pt-[6.25rem] text-[var(--nutella-cream)] md:px-8 md:pt-[8rem]">
+    <main className={`bg-[var(--nutella-cocoa)] ${PAGE_HORIZONTAL_PADDING_CLASS} pb-10 pt-4 text-[var(--nutella-cream)] md:pt-6`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <div className="mx-auto max-w-none md:max-w-6xl">
-        <section className="mb-5 rounded-2xl border border-[var(--nutella-gold)]/35 bg-[rgba(90,44,10,0.42)] p-4 md:p-5">
+      <div className={PAGE_CONTAINER_CLASS}>
+        <section className="mb-6 rounded-2xl border border-[var(--nutella-gold)]/50 bg-[rgba(75,32,6,0.6)] p-6 md:p-8">
           <header>
             <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">{dict.ranking.heading}</h1>
             <p className="mt-2 text-base font-semibold text-[color:rgba(255,231,155,0.92)]">{dict.ranking.intro.question}</p>
@@ -177,7 +167,7 @@ export default async function RankingPage({ params, searchParams }: RankingPageP
             <p className="mt-2 text-sm text-[color:rgba(255,231,155,0.84)]">{dict.ranking.intro.paragraph2}</p>
           </header>
 
-          <div className="mt-5 border-t border-[var(--nutella-gold)]/30 pt-5">
+          <div className="mt-5 border-t border-[var(--nutella-gold)]/35 pt-5">
             <h2 className="flex items-center gap-2 text-lg font-bold tracking-tight">
               <BulbIcon />
               {dict.ranking.guide.title}

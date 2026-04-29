@@ -31,8 +31,8 @@ export default function RankingSortTabs({ activeSort, labels }: RankingSortTabsP
   };
 
   return (
-    <div className="mb-6 flex justify-center">
-      <div className="flex w-full max-w-xl flex-wrap justify-center gap-2">
+    <div className="mb-6 flex justify-center px-4 md:px-8">
+      <div className="flex w-full max-w-sm flex-wrap justify-center gap-3">
         {SORTS.map((item) => {
           const isActive = item === activeSort;
 

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { hasLocale, type Locale } from '@/lib/i18n/config';
 import { createLocalizedMetadata } from '@/lib/seo';
+import { PAGE_CONTAINER_CLASS, PAGE_HORIZONTAL_PADDING_CLASS } from '@/lib/layout';
 
 type InfoLegalPageProps = {
   params: Promise<{ locale: string }>;
@@ -124,12 +125,12 @@ export default async function InfoLegalPage({ params }: InfoLegalPageProps) {
   };
 
   return (
-    <main className="bg-[var(--nutella-cocoa)] px-4 pb-10 pt-4 text-[var(--nutella-cream)] md:px-8 md:pt-6">
+    <main className={`bg-[var(--nutella-cocoa)] ${PAGE_HORIZONTAL_PADDING_CLASS} pb-10 pt-4 text-[var(--nutella-cream)] md:pt-6`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <div className="mx-auto max-w-none md:max-w-4xl">
+      <div className={PAGE_CONTAINER_CLASS}>
         <section className="mb-6 rounded-2xl border border-[var(--nutella-gold)]/35 bg-[rgba(90,44,10,0.42)] p-4 md:p-5">
           <header>
-            <h1 className="text-3xl font-extrabold tracking-tight md:text-4xl">{legal.heading}</h1>
+            <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">{legal.heading}</h1>
             <p className="mt-3 text-sm text-[color:rgba(255,231,155,0.88)]">{legal.intro}</p>
           </header>
 

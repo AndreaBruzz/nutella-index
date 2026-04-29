@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { Locale, Messages } from '@/lib/i18n/config';
+import { PAGE_CONTAINER_CLASS, PAGE_HORIZONTAL_PADDING_CLASS } from '@/lib/layout';
 
 type SiteFooterProps = {
   locale: Locale;
@@ -21,8 +22,8 @@ export default function SiteFooter({ locale, nav, footer }: SiteFooterProps) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-10 border-t border-[var(--nutella-gold)]/35 bg-[rgba(46,10,0,0.72)] px-4 py-6 text-[var(--nutella-cream)] md:px-8">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <footer className={`mt-10 border-t border-[var(--nutella-gold)]/35 bg-[rgba(46,10,0,0.72)] ${PAGE_HORIZONTAL_PADDING_CLASS} py-6 text-[var(--nutella-cream)] md:py-8`}>
+      <div className={`${PAGE_CONTAINER_CLASS} flex flex-col gap-4 md:flex-row md:items-center md:justify-between`}>
         <div>
           <p className="text-sm font-semibold">{nav.title}</p>
           <p className="mt-1 text-xs text-[color:rgba(255,231,155,0.82)]">{footer.builtWith}</p>

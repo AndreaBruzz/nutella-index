@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { hasLocale, type Locale } from '@/lib/i18n/config';
 import { createLocalizedMetadata } from '@/lib/seo';
+import { PAGE_CONTAINER_CLASS, PAGE_HORIZONTAL_PADDING_CLASS } from '@/lib/layout';
 
 type DocsPageProps = {
   params: Promise<{ locale: string }>;
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: DocsPageProps): Promise<Metad
   }
 
   const locale = rawLocale as Locale;
-  const dict = await getDictionary(locale);
+  await getDictionary(locale);
 
   return createLocalizedMetadata({
     locale,
@@ -118,12 +119,12 @@ export default async function DocsPage({ params }: DocsPageProps) {
   };
 
   return (
-    <main className="bg-[var(--nutella-cocoa)] px-4 pb-10 pt-4 text-[var(--nutella-cream)] md:px-8 md:pt-6">
+    <main className={`bg-[var(--nutella-cocoa)] ${PAGE_HORIZONTAL_PADDING_CLASS} pb-10 pt-4 text-[var(--nutella-cream)] md:pt-6`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <div className="mx-auto max-w-none md:max-w-4xl">
+      <div className={PAGE_CONTAINER_CLASS}>
         <section className="mb-6 rounded-2xl border border-[var(--nutella-gold)]/35 bg-[rgba(90,44,10,0.42)] p-4 md:p-5">
           <header>
-            <h1 className="text-3xl font-extrabold tracking-tight md:text-4xl">
+            <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">
               {locale === 'it' ? 'Guida di Nutella Index' : 'Nutella Index Guide'}
             </h1>
             <p className="mt-3 text-sm text-[color:rgba(255,231,155,0.88)]">
@@ -170,7 +171,7 @@ export default async function DocsPage({ params }: DocsPageProps) {
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[color:rgba(255,239,200,0.9)]">
               {locale === 'it'
-                ? 'La mappa interattiva visualizza i dati di Nutella Index su una cartografia mondiale. Puoi esplorare i prezzi medi per paese, cercare specifiche regioni e analizzare i dati visivamente.'
+                  ? 'La mappa interattiva visualizza i dati di Nutella Index su una cartografia mondiale. Puoi esplorare i prezzi medi per paese, cercare specifiche regioni e analizzare i dati visivamente.'
                 : 'The interactive map displays Nutella Index data on a world map. You can explore average prices by country, search for specific regions, and analyze data visually.'}
             </p>
             <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color:rgba(255,231,155,0.88)]">
@@ -275,7 +276,7 @@ export default async function DocsPage({ params }: DocsPageProps) {
                   <Link href={`/${locale}/info/data-info`} className="underline decoration-[rgba(255,231,155,0.55)] underline-offset-2 hover:text-[var(--nutella-gold)]">
                     Data Information
                   </Link>
-                  {' '}you\'ll find a comprehensive guide on data sourcing, normalization, and accuracy limits.
+                  {' '}you&#39;ll find a comprehensive guide on data sourcing, normalization, and accuracy limits.
                 </>
               )}
             </p>
@@ -290,7 +291,7 @@ export default async function DocsPage({ params }: DocsPageProps) {
               <li>
                 {locale === 'it'
                   ? 'Filtra i dati per paese sulla mappa per vedere solo i prezzi di quella regione'
-                  : 'Filter data by country on the map to see only that region\'s prices'}
+                  : 'Filter data by country on the map to see only that region&#39;s prices'}
               </li>
               <li>
                 {locale === 'it'

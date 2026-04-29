@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { hasLocale, type Locale } from '@/lib/i18n/config';
 import { createLocalizedMetadata } from '@/lib/seo';
+import { PAGE_CONTAINER_CLASS, PAGE_HORIZONTAL_PADDING_CLASS } from '@/lib/layout';
 
 type InfoPageProps = {
   params: Promise<{ locale: string }>;
@@ -107,9 +108,9 @@ export default async function InfoPage({ params }: InfoPageProps) {
   ];
 
   return (
-    <main className="bg-[var(--nutella-cocoa)] px-4 pb-10 pt-4 text-[var(--nutella-cream)] md:px-8 md:pt-6">
+    <main className={`bg-[var(--nutella-cocoa)] ${PAGE_HORIZONTAL_PADDING_CLASS} pb-10 pt-4 text-[var(--nutella-cream)] md:pt-6`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <div className="mx-auto max-w-none md:max-w-4xl rounded-2xl border border-[var(--nutella-gold)]/60 bg-[rgba(75,32,6,0.7)] p-4 sm:p-6">
+      <div className={`${PAGE_CONTAINER_CLASS} rounded-2xl border border-[var(--nutella-gold)]/50 bg-[rgba(75,32,6,0.6)] p-6 md:p-8`}>
         <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{dict.info.heading}</h1>
         <p className="mt-3 text-sm text-[color:rgba(255,231,155,0.85)]">{dict.info.intro}</p>
 

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 import { hasLocale, type Locale } from '@/lib/i18n/config';
 import { createLocalizedMetadata } from '@/lib/seo';
+import { PAGE_CONTAINER_CLASS, PAGE_HORIZONTAL_PADDING_CLASS } from '@/lib/layout';
 
 type AboutPageProps = {
   params: Promise<{ locale: string }>;
@@ -93,22 +94,22 @@ export default async function AboutPage({ params }: AboutPageProps) {
   };
 
   return (
-    <main className="bg-[var(--nutella-cocoa)] px-4 pb-10 pt-4 text-[var(--nutella-cream)] md:px-8 md:pt-6">
+    <main className={`bg-[var(--nutella-cocoa)] ${PAGE_HORIZONTAL_PADDING_CLASS} pb-10 pt-4 text-[var(--nutella-cream)] md:pt-6`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <div className="mx-auto max-w-none md:max-w-4xl">
-        <section className="mb-6 rounded-2xl border border-[var(--nutella-gold)]/35 bg-[rgba(90,44,10,0.42)] p-4 md:p-5">
+      <div className={PAGE_CONTAINER_CLASS}>
+        <section className="mb-6 rounded-2xl border border-[var(--nutella-gold)]/50 bg-[rgba(75,32,6,0.6)] p-6 md:p-8">
           <header>
-            <h1 className="text-3xl font-extrabold tracking-tight md:text-4xl">{about.heading}</h1>
+            <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">{about.heading}</h1>
           </header>
 
-          <div className="mt-5 border-t border-[var(--nutella-gold)]/30 pt-5">
+          <div className="mt-5 border-t border-[var(--nutella-gold)]/35 pt-5">
             <h2 className="flex items-center gap-2 text-lg font-bold tracking-tight">
               <IntroIcon />
               {about.intro.title}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[color:rgba(255,239,200,0.9)]">{about.intro.paragraph1}</p>
             <p className="mt-2 text-sm leading-relaxed text-[color:rgba(255,239,200,0.9)]">{about.intro.paragraph2}</p>
-            <blockquote className="mt-4 rounded-xl border border-[var(--nutella-gold)]/25 bg-[rgba(75,32,6,0.38)] px-4 py-3 text-sm italic text-[color:rgba(255,231,155,0.92)]">
+            <blockquote className="mt-4 rounded-xl border border-[var(--nutella-gold)]/35 bg-[rgba(75,32,6,0.5)] px-4 py-3 text-sm italic text-[color:rgba(255,231,155,0.92)]">
               {about.intro.quote}
             </blockquote>
           </div>

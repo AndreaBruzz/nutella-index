@@ -48,6 +48,116 @@ Examples:
 - `validateCountryCode`
 - `mapPriceRowToPriceCard`
 
+## Layout & Spacing Pattern
+
+**Rule**: All page layouts must use shared container constants to ensure header, footer, and content alignment.
+
+### Shared Constants
+
+Import from `lib/layout.ts`:
+
+```typescript
+import {
+  PAGE_CONTAINER_CLASS,
+  PAGE_HORIZONTAL_PADDING_CLASS,
+} from "@/lib/layout";
+```
+
+Apply both together on every page root and all major content wrappers:
+
+```typescript
+<div className={`${PAGE_CONTAINER_CLASS} ${PAGE_HORIZONTAL_PADDING_CLASS}`}>
+  {/* page content */}
+</div>
+```
+
+**Why**: Prevents width drift across pages. One change in `lib/layout.ts` updates header, footer, and all content consistently.
+
+### Spacing Scale
+
+Never use custom values. Only Tailwind standard scale:
+
+**Avoid**: `px-3`, `py-2.5`, `gap-2.25`, `pt-[6.25rem]`, `rounded-[0.7rem]`
+
+**Use**: `px-4`, `py-3`, `gap-3`, `pt-4`, `rounded-lg`
+
+Common spacing patterns:
+
+| Element         | Pattern          | Notes                        |
+| --------------- | ---------------- | ---------------------------- |
+| Page sections   | `space-y-6`      | 24px between sections        |
+| Header/footer   | `py-3 md:py-4`   | Mobile 12px, desktop 16px    |
+| Card padding    | `p-6 md:p-8`     | Mobile 24px, desktop 32px    |
+| Navigation gaps | `gap-3 md:gap-4` | 12px → 16px at md breakpoint |
+
+### Typography Scale
+
+All headings must use standard Tailwind scale:
+
+**Page h1**: `text-2xl sm:text-3xl md:text-4xl`  
+**Section h2**: `text-xl sm:text-2xl md:text-3xl`  
+**Subheading h3**: `text-lg sm:text-xl md:text-2xl`
+
+Avoid custom text sizes: `text-[1.05rem]`, `text-[2.15rem]`
+
+### Border & Background Opacities
+
+Brand color borders use only these opacity levels:
+
+| Opacity | Usage                           |
+| ------- | ------------------------------- |
+| `/50`   | Primary borders, featured cards |
+| `/35`   | Secondary borders               |
+| `/25`   | Subtle accents                  |
+
+Background colors: `0.6` (primary), `0.5` (secondary), `0.4` (tertiary)
+
+### Mobile Menu Pattern
+
+For header dropdown menus:
+
+1. Use single `useState` toggle (not multiple listeners)
+2. Wrap menu in relative header container
+3. Position menu absolutely below header
+4. Use ref-based outside-click listener (not document-level):
+
+```typescript
+const headerRef = useRef<HTMLDivElement>(null);
+const [menuOpen, setMenuOpen] = useState(false);
+
+useEffect(() => {
+  if (!menuOpen) return;
+
+  const handlePointerDown = (e: PointerEvent) => {
+    if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+      setMenuOpen(false);
+    }
+  };
+
+  document.addEventListener("pointerdown", handlePointerDown, true);
+  return () =>
+    document.removeEventListener("pointerdown", handlePointerDown, true);
+}, [menuOpen]);
+```
+
+**Why**: Ref-based prevents menu from closing instantly when button is clicked.
+
+### Glass Header Effect
+
+Default header styling (all pages):
+
+```
+bg-[rgba(46,10,0,0.05)] shadow-[0_14px_36px_rgba(0,0,0,0.05)] backdrop-blur-lg
+```
+
+For `/map` page only, use transparent variant:
+
+```
+bg-transparent shadow-[0_14px_36px_rgba(0,0,0,0.05)] backdrop-blur-lg
+```
+
+**See**: `docs/technical/LAYOUT_SYSTEM.md` for full details.
+
 ## File placement
 
 Use:

@@ -6,6 +6,7 @@ import SubmitForm from '@/components/submit/SubmitForm';
 import { getCountryOptions } from '@/lib/countries';
 import { getCurrencyOptions } from '@/lib/currencies';
 import { createLocalizedMetadata } from '@/lib/seo';
+import { PAGE_CONTAINER_CLASS, PAGE_HORIZONTAL_PADDING_CLASS } from '@/lib/layout';
 
 type SubmitPageProps = {
   params: Promise<{ locale: string }>;
@@ -42,9 +43,9 @@ export default async function SubmitPage({ params }: SubmitPageProps) {
   const currencies = getCurrencyOptions();
 
   return (
-    <main className="bg-[var(--nutella-cocoa)] px-4 pb-10 pt-4 text-[var(--nutella-cream)] md:px-8 md:pt-6">
-      <div className="mx-auto max-w-none md:max-w-3xl rounded-2xl border border-[var(--nutella-gold)]/60 bg-[rgba(75,32,6,0.7)] p-6">
-        <h1 className="text-3xl font-extrabold tracking-tight">{dict.submit.heading}</h1>
+    <main className={`bg-[var(--nutella-cocoa)] ${PAGE_HORIZONTAL_PADDING_CLASS} pb-10 pt-4 text-[var(--nutella-cream)] md:pt-6`}>
+      <div className={`${PAGE_CONTAINER_CLASS} rounded-2xl border border-[var(--nutella-gold)]/50 bg-[rgba(75,32,6,0.6)] p-6 md:p-8`}>
+        <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">{dict.submit.heading}</h1>
         <p className="mt-3 text-sm text-[color:rgba(255,231,155,0.85)]">{dict.submit.description}</p>
 
         <SubmitForm locale={rawLocale} copy={dict.submit} countries={countries} currencies={currencies} />

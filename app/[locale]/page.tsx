@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { hasLocale, type Locale } from '@/lib/i18n/config';
 import LanguageSelector from '@/components/i18n/LanguageSelector';
 import { getDictionary } from '@/lib/i18n/dictionaries';
+import { PAGE_CONTAINER_CLASS, PAGE_HORIZONTAL_PADDING_CLASS } from '@/lib/layout';
 
 function MapIcon() {
   return (
@@ -105,16 +106,16 @@ export default async function HomePage({ params }: HomePageProps) {
   };
 
   return (
-    <main className="flex-1 bg-[var(--nutella-cocoa)] px-4 pb-14 pt-4 text-[var(--nutella-cream)] md:px-8 md:pt-6">
+    <main className={`flex-1 bg-[var(--nutella-cocoa)] ${PAGE_HORIZONTAL_PADDING_CLASS} pb-10 pt-4 text-[var(--nutella-cream)] md:pt-6`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
 
-      <div className="mx-auto max-w-none md:max-w-5xl space-y-6">
-        <section className="rounded-2xl border border-[var(--nutella-gold)]/45 bg-[rgba(90,44,10,0.45)] p-5 md:p-7">
+      <div className={`${PAGE_CONTAINER_CLASS} space-y-6`}>
+        <section className="rounded-2xl border border-[var(--nutella-gold)]/50 bg-[rgba(75,32,6,0.6)] p-6 md:p-8">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:rgba(255,231,155,0.86)]">
             Global Nutella Price Index
           </p>
 
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
+          <h1 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">
             {locale === 'it'
               ? 'Scopri come cambiano i prezzi della Nutella nel mondo.'
               : 'Discover how Nutella prices change around the world.'}
@@ -135,7 +136,7 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="grid gap-3 sm:grid-cols-2">
             <Link
               href={`/${locale}/map`}
-              className="group flex min-h-32 items-center gap-4 rounded-xl border border-[var(--nutella-gold)]/40 bg-[rgba(75,32,6,0.3)] p-4 transition-all hover:border-[var(--nutella-gold)]/60 hover:bg-[rgba(75,32,6,0.5)] sm:gap-5 sm:p-5"
+              className="group flex min-h-32 items-center gap-4 rounded-xl border border-[var(--nutella-gold)]/35 bg-[rgba(75,32,6,0.4)] p-4 transition-all hover:border-[var(--nutella-gold)]/50 hover:bg-[rgba(75,32,6,0.55)] sm:gap-5 sm:p-5"
             >
               <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-[rgba(250,179,11,0.1)] text-[var(--nutella-gold)] transition-colors group-hover:bg-[rgba(250,179,11,0.18)]">
                 <MapIcon />
