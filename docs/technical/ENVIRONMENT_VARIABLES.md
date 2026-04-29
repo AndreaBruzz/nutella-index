@@ -172,6 +172,16 @@ On Vercel or other platforms:
 
 Vercel-specific: Environment variables are managed in Project Settings → Environment Variables.
 
+## CI Requirements
+
+GitHub Actions build checks need the same Supabase variables as production when the app prerenders locale routes:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+Store them as repository secrets so `next build` can complete in CI.
+
 ---
 
 ## Updates to This Document
